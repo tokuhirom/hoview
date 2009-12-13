@@ -130,23 +130,25 @@ sub render_entry {
     my $file = shift;
     my $basename = basename($file);
     return if $basename =~ /^[.]/;
-
     print "rendering $file\n";
 
-    open my $fh, '<:utf8', $file or die "Can't open file($file) : $!";
-    my $title = <$fh>;
-    my $bodysrc = do { local $/; <$fh> };
-    close $fh;
+    eval {
+        open my $fh, '<:utf8', $file or die "Can't open file($file) : $!";
+        my $title = <$fh>;
+        my $bodysrc = do { local $/; <$fh> };
+        close $fh;
 
-    $title =~ s/^\*\s*//;
-    my $body = Text::Hatena->parse($bodysrc);
-    my $mtime = DateTime->from_epoch(epoch => stat($file)->mtime);
-    my $html = render_mt($entry_tmpl, $title, encoded_string($body), $mtime->strftime('%Y-%m-%d(%a) %H:%M:%S'))->as_string;
-    (my $obasename = $basename) =~ s/\.[^.]+$/.html/;
-    my $ofilename = "$outputdir/$obasename";
-    write_file($html => $ofilename);
+        $title =~ s/^\*\s*//;
+        my $body = Text::Hatena->parse($bodysrc);
+        my $mtime = DateTime->from_epoch(epoch => stat($file)->mtime);
+        my $html = render_mt($entry_tmpl, $title, encoded_string($body), $mtime->strftime('%Y-%m-%d(%a) %H:%M:%S'))->as_string;
+        (my $obasename = $basename) =~ s/\.[^.]+$/.html/;
+        my $ofilename = "$outputdir/$obasename";
+        write_file($html => $ofilename);
 
-    $map->{$obasename} = {mtime => $mtime, title => $title};
+        $map->{$obasename} = {mtime => $mtime, title => $title};
+    };
+    warn "Cannot rendering $file: $@\n" if $@;
 }
 
 sub render_index {
