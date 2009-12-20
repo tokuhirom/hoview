@@ -6,7 +6,7 @@ use Text::MicroTemplate qw/render_mt encoded_string/;
 use File::Basename;
 use File::stat;
 use POSIX;
-use DateTime;
+use Time::Piece;
 use Path::Class qw/dir/;
 
 my $render_entryingPerChild = 1000;
@@ -140,7 +140,7 @@ sub render_entry {
 
         $title =~ s/^\*\s*//;
         my $body = Text::Hatena->parse($bodysrc);
-        my $mtime = DateTime->from_epoch(epoch => stat($file)->mtime);
+        my $mtime = Time::Piece->new(stat($file)->mtime);
         my $html = render_mt($entry_tmpl, $title, encoded_string($body), $mtime->strftime('%Y-%m-%d(%a) %H:%M:%S'))->as_string;
         (my $obasename = $basename) =~ s/\.[^.]+$/.html/;
         my $ofilename = "$outputdir/$obasename";
@@ -158,7 +158,7 @@ sub render_index {
     }
     @files = reverse sort { $a->{mtime} <=> $b->{mtime} } @files;
 
-    my $html = render_mt($index_tmpl, \@files, DateTime->now->strftime('%Y-%m-%d(%a) %H:%M:%S'));
+    my $html = render_mt($index_tmpl, \@files, Time::Piece->new->strftime('%Y-%m-%d(%a) %H:%M:%S'));
     write_file($html => "$outputdir/index.html");
 }
 sub render_menu {
@@ -168,7 +168,7 @@ sub render_menu {
     }
     @files = reverse sort { $a->{mtime} <=> $b->{mtime} } @files;
 
-    my $html = render_mt($menu_tmpl, \@files, DateTime->now->strftime('%Y-%m-%d(%a) %H:%M:%S'));
+    my $html = render_mt($menu_tmpl, \@files, Time::Piece->new->strftime('%Y-%m-%d(%a) %H:%M:%S'));
     write_file($html => "$outputdir/menu.html");
 }
 
