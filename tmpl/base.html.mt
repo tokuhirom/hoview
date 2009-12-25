@@ -17,8 +17,8 @@
         </div>
 		<div id="menu">
 			<ul>
-				<li><a href="/" class="active">Home</a></li>
-				<li><a href="/memo/">Blog</a></li>
+				<li><a href="/">Home</a></li>
+				<li><a href="/memo/" class="active">Blog</a></li>
 			</ul>
 		</div>
     </div>
