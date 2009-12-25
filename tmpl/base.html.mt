@@ -8,6 +8,10 @@
     <link rel="alternate" type="application/rss+xml" title="RSS" href="http://64p.org/memo/index.rss">
     <link href="/static/refresh/style.css" rel="stylesheet" type="text/css" media="screen" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script>
+    <script type="text/javascript">
+    Hatena.Star.Token = '585c8d3c3b865fe49c241dd9a04cb90b7ca1470b';
+    </script>
 </head>
 <body>
 <div id="wrapper">
@@ -48,5 +52,18 @@
             $("#menuContainer").load("/memo/menu.html");
         });
     </script>
+    <script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script>
+    <script type="text/javascript">
+    Hatena.Star.SiteConfig = {
+        entryNodes: {
+            'div.post': {
+                uri: 'div.bookmark a',
+                title: 'h2',
+                container: 'h2'
+            }
+        }
+    };
+    </script>
+
 </body>
 </html>

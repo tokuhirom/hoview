@@ -21,6 +21,7 @@ my $mt = Text::MicroTemplate::Extended->new(
 );
 my $render_entryingPerChild = 1000;
 my $AUTHOR = 'tokuhirom';
+my $ROOT = 'http://64p.org/memo/';
 my $inputdir = '/home/tokuhirom/dev/gp.ath.cx/data/';
 my $outputdir = '/usr/local/webapp/gp.ath.cx/public/memo/';
 my $map = {};
@@ -71,9 +72,9 @@ sub render_entry {
         $title =~ s/^\*\s*//;
         my $body = Text::Hatena->parse($bodysrc);
         my $mtime = Time::Piece->new(stat($file)->mtime);
-        my $html = $mt->render('entry.html', $title, encoded_string($body), $mtime->strftime('%Y-%m-%d(%a) %H:%M:%S'));
         (my $obasename = $basename) =~ s/\.[^.]+$/.html/;
         my $ofilename = "$outputdir/$obasename";
+        my $html = $mt->render('entry.html', $title, encoded_string($body), $mtime->strftime('%Y-%m-%d(%a) %H:%M:%S'), "$ROOT$obasename");
         write_file($html => $ofilename);
 
         $map->{$obasename} = {mtime => $mtime, title => $title, body => $body, bodysrc => $bodysrc};
